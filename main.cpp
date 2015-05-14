@@ -88,23 +88,15 @@ int createLockFile(char *path, char *operationType, char *blockNumber) {
         lockFile = fopen(path, "w");
     }
     else{
-        struct Line line;
-        while(!feof(lockFile))
-        {
-            parseLine(lockFile, &line);
-            if (strcmp(line.blockNumber, blockNumber)==0 && (strcmp(line.operationType, operationType) == 0))
-            {
-                return -2;
-            }
-        }
+        return -2;
     }
     printLockFile(lockFile, operationType, blockNumber);
     fclose(lockFile);
-//    sleep(20);
+    sleep(20);
     remove((char const *) absoluteLockLockFilePath);
+    //sleep(20);
     return 1;
 }
-
 
 int checkLock(char *file, char *operationType, char *block) {
     char absoluteLockFileName[strlen(file) + 4];
@@ -119,21 +111,19 @@ int checkLock(char *file, char *operationType, char *block) {
         case 1: {
             printf("Успешно залочено\n");
             return 1;
-            break;
         }
         case -1: {
             printf("Кто то лочит сейчас\n");
             return -1;
         }
         case -2: {
-            printf("Данная операция на данный блок залочена\n");
+            printf("В данный момент файл кем то редактируется\n");
             return -1;
         }
         default:
             break;
     }
     return 1;
-
 }
 
 int fileOperation(char *path, char *numberOfBlock, char * operationType, char *name, char *password)
