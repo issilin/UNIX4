@@ -77,7 +77,7 @@ int createLockFile(char *path, char *operationType, char *blockNumber) {
     while (findFile(dirPath, lockLockFileName))
     {
         printf("Кто-то залочил файл, Ждем..\n");
-        sleep(1);
+        sleep(5);
     }
 
     FILE *lockLockFile = fopen(absoluteLockLockFilePath, "w");
@@ -88,13 +88,14 @@ int createLockFile(char *path, char *operationType, char *blockNumber) {
         lockFile = fopen(path, "w");
     }
     else{
+        remove((char const *) absoluteLockLockFilePath);
         return -2;
     }
     printLockFile(lockFile, operationType, blockNumber);
     fclose(lockFile);
-    sleep(20);
+//    sleep(20);
     remove((char const *) absoluteLockLockFilePath);
-    //sleep(20);
+    sleep(20);
     return 1;
 }
 
